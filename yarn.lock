@@ -3304,7 +3304,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-runtime@workspace:^7.10.4, @babel/plugin-transform-runtime@workspace:packages/babel-plugin-transform-runtime":
+"@babel/plugin-transform-runtime@workspace:^7.0.0, @babel/plugin-transform-runtime@workspace:^7.10.4, @babel/plugin-transform-runtime@workspace:packages/babel-plugin-transform-runtime":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-runtime@workspace:packages/babel-plugin-transform-runtime"
   dependencies:
@@ -7708,6 +7708,7 @@ __metadata:
   resolution: "babel-sandboxes@workspace:sandbox"
   dependencies:
     "@babel/core": "workspace:^7.0.0"
+    "@babel/plugin-transform-runtime": "workspace:^7.0.0"
     "@babel/preset-env": "workspace:^7.0.0"
     "@babel/preset-react": "workspace:^7.0.0"
     "@babel/standalone": ^7.0.0

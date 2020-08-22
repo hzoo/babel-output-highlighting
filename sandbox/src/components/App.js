@@ -19,8 +19,8 @@ function mergeLoc(sourceAST, newAST, cb) {
       sourceAST.loc = newAST.loc;
     } else if (Array.isArray(value)) {
       for (let i = 0; i < value.length; i++) {
-        if (value && typeof value === "object") {
-          mergeLoc(value[i], newAST[key][i], cb);
+        if (value[i] && typeof value[i] === "object") {
+          if (newAST?.[key]?.[i]) mergeLoc(value[i], newAST[key][i], cb);
         }
       }
     } else if (value && typeof value === "object") {
@@ -41,8 +41,11 @@ function fixLoc(loc) {
 
 let proposalMap = {
   "transform-numeric-separator": "background: rgba(42, 187, 155, 0.3)",
-  "transform-classes": "background: rgba(240, 52, 52, 0.3)",
-  "proposal-optional-chaining": "background: rgba(44, 130, 201, 0.3)",
+  "transform-classes": "background: var(--red)",
+  "proposal-optional-chaining": "background: rgba(44, 130, 201, 0.2)",
+  "transform-template-literals": "background: rgba(24, 240, 57, 0.3)",
+  "react-jsx": "background: rgba(223, 125, 41, 0.2)",
+  "transform-for-of": "background: rgba(21, 132, 196, 0.5)",
 };
 
 function CompiledOutput({
@@ -301,9 +304,9 @@ const Wrapper = styled.div`
   }
 `;
 
-const Config = styled(Editor)`
-  padding: 4px;
-`;
+// const Config = styled(Editor)`
+//   padding: 4px;
+// `;
 
 const Code = styled(Editor)`
   padding: 4px;
@@ -348,11 +351,11 @@ const ToggleRoot = styled.div`
   }
 `;
 
-const Actions = styled(Wrapper)`
-  border-bottom: 1px solid rgba(36, 40, 42, 1);
-  padding: 1rem;
+// const Actions = styled(Wrapper)`
+//   border-bottom: 1px solid rgba(36, 40, 42, 1);
+//   padding: 1rem;
 
-  button {
-    margin-left: 1rem;
-  }
-`;
+//   button {
+//     margin-left: 1rem;
+//   }
+// `;

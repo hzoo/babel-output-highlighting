@@ -4,6 +4,7 @@
   "description": "",
   "dependencies": {
     "@babel/core": "workspace:^7.0.0",
+    "@babel/plugin-transform-runtime": "workspace:^7.0.0",
     "@babel/preset-env": "workspace:^7.0.0",
     "@babel/preset-react": "workspace:^7.0.0",
     "@babel/standalone": "^7.0.0",

@@ -89,7 +89,7 @@ export default declare((api, options) => {
             const data = ${t.callExpression(helperId, callExpressionInput)};
             ${templateObject} = function() { return data };
             return data;
-          } 
+          }
         `;
 
         scope.path.unshiftContainer("body", lazyLoad);
@@ -98,6 +98,7 @@ export default declare((api, options) => {
             t.callExpression(t.cloneNode(templateObject), []),
             ...quasi.expressions,
           ]),
+          "transform-template-literals",
         );
       },
 
@@ -136,7 +137,7 @@ export default declare((api, options) => {
           root = buildConcatCallExpressions(nodes);
         }
 
-        path.replaceWith(root);
+        path.replaceWith(root, "transform-template-literals");
       },
     },
   };

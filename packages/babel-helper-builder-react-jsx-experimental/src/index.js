@@ -88,7 +88,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           callExpr = buildJSXElementCall(path, file);
         }
 
-        path.replaceWith(t.inherits(callExpr, path.node));
+        path.replaceWith(t.inherits(callExpr, path.node), "react-jsx");
       },
     },
 
@@ -101,7 +101,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           callExpr = buildJSXFragmentCall(path, file);
         }
 
-        path.replaceWith(t.inherits(callExpr, path.node));
+        path.replaceWith(t.inherits(callExpr, path.node), "react-jsx");
       },
     },
 

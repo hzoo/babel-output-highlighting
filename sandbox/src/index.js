@@ -2,9 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { App } from "./components/App";
 
-const SOURCE = `class A {
+const SOURCE = `<a></a>;
+class A {
   a() {
-    a?.[1_0_0_0_0];
+    for (b of []) {
+      \`a\${c?.[1_0_0_0_0]}\`;
+	  }
   }
 }`;
 const CONFIG = [
@@ -13,6 +16,17 @@ const CONFIG = [
       [
         "@babel/preset-env",
         { loose: true, modules: false, shippedProposals: true },
+      ],
+      "@babel/preset-react",
+    ],
+    plugins: [
+      [
+        require("@babel/plugin-transform-runtime"),
+        {
+          useESModules: true,
+          // helpers: false,
+          version: "7.100.0",
+        },
       ],
     ],
   },

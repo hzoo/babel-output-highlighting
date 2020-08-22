@@ -43,13 +43,22 @@ const hoistVariablesVisitor = {
  *  - Remove the current node.
  */
 
-export function replaceWithMultiple(nodes: Array<Object>) {
+export function replaceWithMultiple(nodes: Array<Object>, name) {
   this.resync();
 
   nodes = this._verifyNodeList(nodes);
   t.inheritLeadingComments(nodes[0], this.node);
   t.inheritTrailingComments(nodes[nodes.length - 1], this.node);
   this.node = this.container[this.key] = null;
+
+  // annotate nodes
+  nodes.forEach(node => {
+    if (name) {
+      node.extra = node.extra || {};
+      node.extra.sourcePlugin = name;
+    }
+  });
+
   const paths = this.insertAfter(nodes);
 
   if (this.node) {

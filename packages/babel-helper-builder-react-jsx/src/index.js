@@ -31,7 +31,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     exit(path, file) {
       const callExpr = buildElementCall(path, file);
       if (callExpr) {
-        path.replaceWith(t.inherits(callExpr, path.node));
+        path.replaceWith(t.inherits(callExpr, path.node), "react-jsx");
       }
     },
   };
@@ -45,7 +45,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       }
       const callExpr = buildFragmentCall(path, file);
       if (callExpr) {
-        path.replaceWith(t.inherits(callExpr, path.node));
+        path.replaceWith(t.inherits(callExpr, path.node), "react-jsx");
       }
     },
   };

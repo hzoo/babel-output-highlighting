@@ -88,6 +88,7 @@ export default declare((api, options) => {
               t.updateExpression("++", t.cloneNode(i)),
               blockBody,
             ),
+            "transform-for-of",
           );
         },
       },
@@ -173,7 +174,7 @@ export default declare((api, options) => {
           right.isGenericType("Array") ||
           t.isArrayTypeAnnotation(right.getTypeAnnotation())
         ) {
-          path.replaceWith(_ForOfStatementArray(path));
+          path.replaceWith(_ForOfStatementArray(path), "transform-for-of");
           return;
         }
 
@@ -226,10 +227,10 @@ export default declare((api, options) => {
         if (t.isLabeledStatement(parent)) {
           container[0] = t.labeledStatement(parent.label, container[0]);
 
-          path.parentPath.replaceWithMultiple(nodes);
+          path.parentPath.replaceWithMultiple(nodes, "transform-for-of");
           path.remove();
         } else {
-          path.replaceWithMultiple(nodes);
+          path.replaceWithMultiple(nodes, "transform-for-of");
         }
       },
     },
