@@ -1,3 +1,6 @@
+sandbox/node_modules
+sandbox/build
+
 .npmrc
 
 .yarn/cache
@@ -10,7 +13,6 @@
 /node_modules
 /.github/actions/*/node_modules
 /packages/*/node_modules
-sandbox/node_modules
 /packages/*/LICENSE
 !/packages/babel-parser/LICENSE
 !/packages/babel-plugin-transform-object-assign/LICENSE

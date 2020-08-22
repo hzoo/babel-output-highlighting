@@ -8,7 +8,8 @@
     "build": "make build",
     "fix": "make fix",
     "lint": "make lint",
-    "test": "make test"
+    "test": "make test",
+    "deploy": "yarn && gulp build && cd sandbox && yarn build"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.1",
