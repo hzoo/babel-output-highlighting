@@ -68,7 +68,7 @@ export default declare((api, opts) => {
           state,
         );
         const replace = blockScoping.run();
-        if (replace) path.replaceWith(replace);
+        if (replace) path.replaceWith(replace, "transform-block-scoping");
       },
 
       CatchClause(path, state) {
@@ -140,6 +140,9 @@ function convertBlockScopedToVar(
   if (!node) {
     node = path.node;
   }
+
+  node.extra = node.extra || {};
+  node.extra.sourcePlugin = "transform-block-scoping";
 
   // https://github.com/babel/babel/issues/255
   if (isInLoop(path) && !t.isFor(parent)) {

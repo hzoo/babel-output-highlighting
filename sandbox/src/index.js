@@ -2,7 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { App } from "./components/App";
 
-const SOURCE = `<a></a>;
+const SOURCE = `var z = [...f];
+let d = {
+  f() {},
+  x
+};
+const foo = async (...a) => \`\${a}\`;
+async function a() {};
+<a></a>;
 class A {
   a() {
     for (b of []) {

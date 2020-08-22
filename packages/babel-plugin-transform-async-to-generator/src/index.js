@@ -39,6 +39,8 @@ export default declare((api, options) => {
         remapAsyncToGenerator(path, {
           wrapAsync: state.addHelper("asyncToGenerator"),
         });
+        path.node.extra = path.node.extra || {};
+        path.node.extra.sourcePlugin = "transform-async-to-generator";
       },
     },
   };

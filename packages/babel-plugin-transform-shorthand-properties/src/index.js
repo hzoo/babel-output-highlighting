@@ -20,13 +20,18 @@ export default declare(api => {
           );
           func.returnType = node.returnType;
 
-          path.replaceWith(t.objectProperty(node.key, func, node.computed));
+          path.replaceWith(
+            t.objectProperty(node.key, func, node.computed),
+            "transform-shorthand-properties",
+          );
         }
       },
 
       ObjectProperty({ node }) {
         if (node.shorthand) {
           node.shorthand = false;
+          node.extra = node.extra || {};
+          node.extra.sourcePlugin = "transform-shorthand-properties";
         }
       },
     },

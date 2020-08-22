@@ -46,6 +46,11 @@ let proposalMap = {
   "transform-template-literals": "background: rgba(24, 240, 57, 0.3)",
   "react-jsx": "background: rgba(223, 125, 41, 0.2)",
   "transform-for-of": "background: rgba(21, 132, 196, 0.5)",
+  "transform-parameters": "background: rgba(245, 218, 85, 0.2)",
+  regenerator: "background: rgba(107, 231, 132, 0.2)",
+  "transform-async-to-generator": "background: rgba(107, 231, 132, 0.2)",
+  "transform-spread": "background: rgba(233, 212, 96, 0.2)",
+  "transform-shorthand-properties": "background: rgba(42, 187, 155, 0.3)",
 };
 
 function CompiledOutput({
@@ -62,6 +67,7 @@ function CompiledOutput({
 
   if (outputEditor && compiled.nodes) {
     for (let node of compiled.nodes) {
+      console.log("");
       let highlightColor = proposalMap[node.sourcePlugin];
       if (highlightColor) {
         outputEditor.doc.markText(

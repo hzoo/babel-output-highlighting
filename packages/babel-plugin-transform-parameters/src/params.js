@@ -137,7 +137,7 @@ export default function convertFunctionParams(
             UNDEFINED: undefinedNode,
           }),
         );
-        param.replaceWith(left.node);
+        param.replaceWith(left.node, "transform-parameters");
       } else if (left.isObjectPattern() || left.isArrayPattern()) {
         const paramName = scope.generateUidIdentifier();
         body.push(
@@ -148,7 +148,7 @@ export default function convertFunctionParams(
             UNDEFINED: undefinedNode,
           }),
         );
-        param.replaceWith(paramName);
+        param.replaceWith(paramName, "transform-parameters");
       }
     } else if (paramIsAssignmentPattern) {
       if (firstOptionalIndex === null) firstOptionalIndex = i;
@@ -176,7 +176,7 @@ export default function convertFunctionParams(
       ]);
       body.push(defNode);
 
-      param.replaceWith(t.cloneNode(uid));
+      param.replaceWith(t.cloneNode(uid), "transform-parameters");
     }
 
     if (transformedRestNodes) {
@@ -215,6 +215,8 @@ export default function convertFunctionParams(
     path.get("body").unshiftContainer("body", body);
   }
 
+  body.forEach(addExtra);
+
   return true;
 }
 
@@ -231,4 +233,9 @@ function buildScopeIIFE(shadowedParams, body) {
   return t.returnStatement(
     t.callExpression(t.arrowFunctionExpression(params, body), params),
   );
+}
+
+function addExtra(node) {
+  node.extra = node.extra || {};
+  node.extra.sourcePlugin = "transform-parameters";
 }

@@ -64,7 +64,7 @@ export default declare((api, options) => {
         // we know that the transformed code already takes care of cloning the array.
         // So we can simply return that element.
         if (nodes.length === 1 && first !== elements[0].argument) {
-          path.replaceWith(first);
+          path.replaceWith(first, "transform-spread");
           return;
         }
 
@@ -85,6 +85,7 @@ export default declare((api, options) => {
             t.memberExpression(first, t.identifier("concat")),
             nodes,
           ),
+          "transform-spread",
         );
       },
 
@@ -96,6 +97,9 @@ export default declare((api, options) => {
 
         const calleePath = path.get("callee");
         if (calleePath.isSuper()) return;
+
+        node.extra = node.extra || {};
+        node.extra.sourcePlugin = "transform-spread";
 
         let contextLiteral = scope.buildUndefinedNode();
 
@@ -165,6 +169,7 @@ export default declare((api, options) => {
             node.callee,
             args,
           ]),
+          "transform-spread",
         );
       },
     },

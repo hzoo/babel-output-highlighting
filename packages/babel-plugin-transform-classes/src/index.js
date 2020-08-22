@@ -52,7 +52,7 @@ export default declare((api, options) => {
 
         const inferred = nameFunction(path);
         if (inferred && inferred !== node) {
-          path.replaceWith(inferred);
+          path.replaceWith(inferred, "transform-classes");
           return;
         }
 
@@ -60,6 +60,7 @@ export default declare((api, options) => {
 
         path.replaceWith(
           transformClass(path, state.file, builtinClasses, loose),
+          "transform-classes",
         );
 
         if (path.isCallExpression()) {
