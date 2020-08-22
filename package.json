@@ -76,7 +76,8 @@
   "workspaces": [
     "codemods/*",
     "eslint/*",
-    "packages/*"
+    "packages/*",
+    "sandbox"
   ],
   "resolutions": {
     "@lerna/version": "patch:@lerna/version@npm:3.20.2#.yarn-patches/@lerna/version.patch",
@@ -89,16 +90,6 @@
     "node": ">= 10.13.0",
     "npm": ">= 3.x",
     "yarn": ">=0.27.5 || >=1.0.0-20170811"
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint --format=codeframe"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "dependenciesMeta": {
     "core-js": {

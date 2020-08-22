@@ -8,14 +8,14 @@ module.exports = function (api) {
   const envOptsNoTargets = {
     loose: true,
     modules: false,
-    shippedProposals: true,
+    // shippedProposals: true,
     exclude: ["transform-typeof-symbol"],
   };
   const envOpts = Object.assign({}, envOptsNoTargets);
 
-  const compileDynamicImport = env === "test" || env === "development";
+  const compileDynamicImport = false; // env === "test" || env === "development";
 
-  let convertESM = true;
+  let convertESM = false;
   let ignoreLib = true;
   let includeRegeneratorRuntime = false;
 
@@ -96,7 +96,19 @@ module.exports = function (api) {
     ].filter(Boolean),
     presets: [["@babel/env", envOpts]],
     plugins: [
-      // TODO: Use @babel/preset-flow when
+      {
+        manipulateOptions(opts, parserOpts) {
+          parserOpts.plugins.push("numericSeparator");
+        },
+        visitor: {
+          NumericLiteral({ node }) {
+            const { extra } = node;
+            if (extra && /_/.test(extra.raw)) {
+              extra.raw = extra.raw.replace(/_/g, "");
+            }
+          },
+        },
+      }, // TODO: Use @babel/preset-flow when
       // https://github.com/babel/babel/issues/7233 is fixed
       "@babel/plugin-transform-flow-strip-types",
       ["@babel/proposal-class-properties", { loose: true }],

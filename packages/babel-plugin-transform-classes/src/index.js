@@ -42,6 +42,7 @@ export default declare((api, options) => {
           t.variableDeclaration("let", [
             t.variableDeclarator(ref, t.toExpression(node)),
           ]),
+          "transform-classes",
         );
       },
 

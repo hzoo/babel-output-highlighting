@@ -223,6 +223,11 @@ Object.assign(
   NodePath_comments,
 );
 
+NodePath.prototype.mapToPlugin = function (name) {
+  this.node.extra = node.extra || {};
+  this.node.extra.sourcePlugin = name;
+};
+
 for (const type of (t.TYPES: Array<string>)) {
   const typeKey = `is${type}`;
   const fn = t[typeKey];

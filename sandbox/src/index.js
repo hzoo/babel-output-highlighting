@@ -2,8 +2,21 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { App } from "./components/App";
 
-const SOURCE = `class A {}`;
-const CONFIG = [{}];
+const SOURCE = `class A {
+  a() {
+    a?.[1_0_0_0_0];
+  }
+}`;
+const CONFIG = [
+  {
+    presets: [
+      [
+        "@babel/preset-env",
+        { loose: true, modules: false, shippedProposals: true },
+      ],
+    ],
+  },
+];
 const PLUGIN = `export default function customPlugin(babel) {
   return {
     visitor: {

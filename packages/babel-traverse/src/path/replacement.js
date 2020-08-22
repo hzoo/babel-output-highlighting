@@ -99,7 +99,7 @@ export function replaceWithSourceString(replacement) {
  * Replace the current node with another.
  */
 
-export function replaceWith(replacement) {
+export function replaceWith(replacement, name) {
   this.resync();
 
   if (this.removed) {
@@ -108,6 +108,12 @@ export function replaceWith(replacement) {
 
   if (replacement instanceof NodePath) {
     replacement = replacement.node;
+  }
+
+  // annotate node
+  if (name) {
+    replacement.extra = replacement.extra || {};
+    replacement.extra.sourcePlugin = name;
   }
 
   if (!replacement) {

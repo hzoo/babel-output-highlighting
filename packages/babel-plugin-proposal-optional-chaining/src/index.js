@@ -174,6 +174,7 @@ export default declare((api, options) => {
                 : scope.buildUndefinedNode(),
               replacement,
             ),
+            "proposal-optional-chaining",
           );
 
           replacementPath = replacementPath.get("alternate");

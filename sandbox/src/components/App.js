@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import * as Babel from "@babel/standalone";
-// import * as Babel from "@babel/core";
+import * as Babel from "@babel/core";
 import styled, { css } from "styled-components";
 
 import { Editor } from "./Editor";
@@ -9,6 +8,43 @@ import { gzipSize } from "../gzip";
 
 window.babel = Babel;
 
+function mergeLoc(sourceAST, newAST, cb) {
+  for (let key of Object.keys(sourceAST)) {
+    let value = sourceAST[key];
+    if (key === "start") {
+      sourceAST.start = newAST.start;
+    } else if (key === "end") {
+      sourceAST.end = newAST.end;
+    } else if (key === "loc") {
+      sourceAST.loc = newAST.loc;
+    } else if (Array.isArray(value)) {
+      for (let i = 0; i < value.length; i++) {
+        if (value && typeof value === "object") {
+          mergeLoc(value[i], newAST[key][i], cb);
+        }
+      }
+    } else if (value && typeof value === "object") {
+      if (key === "extra" && value.sourcePlugin) {
+        cb(value, newAST.loc);
+      }
+      if (newAST[key]) mergeLoc(value, newAST[key], cb);
+    }
+  }
+}
+
+function fixLoc(loc) {
+  return {
+    line: loc.line - 1,
+    ch: loc.column,
+  };
+}
+
+let proposalMap = {
+  "transform-numeric-separator": "background: rgba(42, 187, 155, 0.3)",
+  "transform-classes": "background: rgba(240, 52, 52, 0.3)",
+  "proposal-optional-chaining": "background: rgba(44, 130, 201, 0.3)",
+};
+
 function CompiledOutput({
   source,
   customPlugin,
@@ -16,20 +52,55 @@ function CompiledOutput({
   onConfigChange,
   removeConfig,
 }) {
+  const [outputEditor, setOutputEditor] = useState(null);
   const [compiled, setCompiled] = useState(null);
   const [gzip, setGzip] = useState(null);
   const debouncedPlugin = useDebounce(customPlugin, 125);
 
+  if (outputEditor && compiled.nodes) {
+    for (let node of compiled.nodes) {
+      let highlightColor = proposalMap[node.sourcePlugin];
+      if (highlightColor) {
+        outputEditor.doc.markText(
+          fixLoc(node.loc.start),
+          fixLoc(node.loc.end),
+          { css: highlightColor }
+        );
+      }
+    }
+  }
+
   useEffect(() => {
     try {
-      const { code } = Babel.transform(
+      let nodes = [];
+      const { code, ast } = Babel.transform(
         source,
         processOptions(config, debouncedPlugin)
       );
+      let newAST = Babel.parse(code);
+      mergeLoc(ast, newAST, (extra, loc) => {
+        let node = { ...extra, loc };
+        let added = nodes.some((existingNode, i) => {
+          if (
+            loc.start.line < existingNode.loc.start.line ||
+            (loc.start.line === existingNode.loc.start.line &&
+              loc.start.column <= existingNode.loc.start.column &&
+              loc.end.line > existingNode.loc.end.line) ||
+            (loc.end.line === existingNode.loc.end.line &&
+              loc.end.column >= existingNode.loc.end.column)
+          ) {
+            nodes.splice(i, 0, node);
+            return true;
+          }
+          return false;
+        });
+        if (!added) nodes.push(node);
+      });
       gzipSize(code).then(s => setGzip(s));
       setCompiled({
         code,
         size: new Blob([code], { type: "text/plain" }).size,
+        nodes,
       });
     } catch (e) {
       setCompiled({
@@ -41,7 +112,7 @@ function CompiledOutput({
 
   return (
     <Wrapper>
-      <Section>
+      {/* <Section>
         <Config
           value={
             config === Object(config)
@@ -52,19 +123,23 @@ function CompiledOutput({
           docName="config.json"
           config={{ mode: "application/json" }}
         />
-      </Section>
+      </Section> */}
       <Section>
         <Code
           value={compiled?.code ?? ""}
           docName="result.js"
           config={{ readOnly: true, lineWrapping: true }}
           isError={compiled?.error ?? false}
+          getEditor={editor => {
+            window.output = editor;
+            setOutputEditor(editor);
+          }}
         />
       </Section>
       <FileSize>
         {compiled?.size}b, {gzip}b
       </FileSize>
-      <Toggle onClick={removeConfig} />
+      {/* <Toggle onClick={removeConfig} /> */}
     </Wrapper>
   );
 }
@@ -119,7 +194,7 @@ export const App = ({ defaultSource, defaultBabelConfig, defCustomPlugin }) => {
       <Section>
         {/* buttons */}
 
-        <Actions>
+        {/* <Actions>
           <label>
             <input
               checked={enableCustomPlugin}
@@ -138,14 +213,7 @@ export const App = ({ defaultSource, defaultBabelConfig, defCustomPlugin }) => {
           >
             Add New Config
           </button>
-          <button
-            onClick={() => {
-              setSource("const hello = 'world';");
-            }}
-          >
-            Use Example (WIP)
-          </button>
-        </Actions>
+        </Actions> */}
 
         {/* input section */}
 
@@ -214,7 +282,7 @@ const Root = styled.div`
 
 const Section = styled.section`
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
   height: 100%;
   flex: 1;
   position: relative;

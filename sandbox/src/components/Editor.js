@@ -23,7 +23,7 @@ const StyledEditor = styled(CodeMirror)`
   }
 `;
 
-export function Editor({ className, onChange, style, ...options }) {
+export function Editor({ className, onChange, getEditor, style, ...options }) {
   return (
     <StyledEditor
       className={className}
@@ -37,6 +37,9 @@ export function Editor({ className, onChange, style, ...options }) {
       }}
       style={style}
       value={options.value}
+      editorDidMount={editor => {
+        if (getEditor) getEditor(editor);
+      }}
     />
   );
 }
